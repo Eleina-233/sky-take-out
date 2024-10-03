@@ -81,14 +81,6 @@ public class EmployeeServiceImpl implements EmployeeService {
                 DigestUtils.md5DigestAsHex
                         (PasswordConstant.DEFAULT_PASSWORD.getBytes()));
 
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
-
-        //设置当前记录人和修改人id
-        //TODO 后期需要修改当前登录用具的id
-        employee.setCreateUser(BaseContext.getCurrentId());
-        employee.setUpdateUser(BaseContext.getCurrentId());
-
         employeeMapper.insert(employee);
 
     }
@@ -109,6 +101,23 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setStatus(status);
         employee.setId(id);
 
+        employeeMapper.update(employee);
+    }
+
+    @Override
+    public Employee getById(Long id) {
+        Employee employee = employeeMapper.getById(id);
+        employee.setPassword("****");
+        return employee;
+    }
+
+
+    @Override
+    public void update(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+
+        //对象属性拷贝
+        BeanUtils.copyProperties(employeeDTO, employee);
         employeeMapper.update(employee);
     }
 
